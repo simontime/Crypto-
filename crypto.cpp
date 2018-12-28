@@ -15,13 +15,25 @@ static __m128i expand(__m128i key) {
 
 Crypto::Aes128::Aes128(void *key) {
 	k[0] = _mm_loadu_si128((__m128i *)key);
-	k[1] = exp128(k[0], 0x01); k[2] = exp128(k[1], 0x02);
-	k[3] = exp128(k[2], 0x04); k[4] = exp128(k[3], 0x08);
-	k[5] = exp128(k[4], 0x10); k[6] = exp128(k[5], 0x20);
-	k[7] = exp128(k[6], 0x40); k[8] = exp128(k[7], 0x80);
-	k[9] = exp128(k[8], 0x1b); k[10] = exp128(k[9], 0x36);
-	for (int i = 11; i <= 19; i++)
-		k[i] = _mm_aesimc_si128(k[20 - i]);
+	k[1] = exp128(k[0], 0x01); 
+	k[2] = exp128(k[1], 0x02);
+	k[3] = exp128(k[2], 0x04); 
+	k[4] = exp128(k[3], 0x08);
+	k[5] = exp128(k[4], 0x10); 
+	k[6] = exp128(k[5], 0x20);
+	k[7] = exp128(k[6], 0x40); 
+	k[8] = exp128(k[7], 0x80);
+	k[9] = exp128(k[8], 0x1b); 
+	k[10] = exp128(k[9], 0x36);
+	k[11] = _mm_aesimc_si128(k[9]);
+	k[12] = _mm_aesimc_si128(k[8]);
+	k[13] = _mm_aesimc_si128(k[7]);
+	k[14] = _mm_aesimc_si128(k[6]);
+	k[15] = _mm_aesimc_si128(k[5]);
+	k[16] = _mm_aesimc_si128(k[4]);
+	k[17] = _mm_aesimc_si128(k[3]);
+	k[18] = _mm_aesimc_si128(k[2]);
+	k[19] = _mm_aesimc_si128(k[1]);
 }
 
 void Crypto::Aes128::ECBEncryptBlock(void *pt, void *ct) {
